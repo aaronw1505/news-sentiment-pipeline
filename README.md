@@ -1,5 +1,7 @@
 # 📰 News Sentiment Analytics Pipeline
 
+Check it out here: https://news-sentiment-pipeline.streamlit.app/
+
 An end-to-end data pipeline that pulls live news headlines, classifies their
 sentiment with an LLM, models the data with dbt, and serves an interactive
 analytics dashboard — fully automated on a daily schedule.
