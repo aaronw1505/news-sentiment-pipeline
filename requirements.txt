@@ -1,0 +1,12 @@
+# Core pipeline
+anthropic>=0.69.0          # Claude API SDK (structured outputs + prompt caching)
+requests>=2.32.0           # NewsAPI HTTP client
+duckdb>=1.1.0              # local analytical database
+dbt-duckdb>=1.9.0         # dbt adapter for DuckDB
+python-dotenv>=1.0.0      # load secrets from .env
+pydantic>=2.7.0           # schema for structured Claude output
+
+# Dashboard
+streamlit>=1.40.0
+pandas>=2.2.0
+plotly>=5.24.0

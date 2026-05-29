@@ -1,0 +1,49 @@
+name: Daily News Sentiment Pipeline
+
+on:
+  schedule:
+    # 13:00 UTC every day. Adjust to taste (cron is in UTC).
+    - cron: "0 13 * * *"
+  workflow_dispatch: {}   # allow manual runs from the Actions tab
+
+permissions:
+  contents: write          # needed to commit the refreshed database back
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    env:
+      DUCKDB_PATH: ${{ github.workspace }}/data/news.duckdb
+      NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Ingest + classify headlines
+        run: python ingestion/fetch_news.py
+
+      - name: Build dbt models + run tests
+        run: dbt build --project-dir dbt_project --profiles-dir dbt_project
+
+      - name: Commit refreshed database
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f data/news.duckdb
+          if git diff --staged --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "chore: refresh news sentiment data [skip ci]"
+            git push
+          fi

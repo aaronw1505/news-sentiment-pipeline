@@ -1,0 +1,16 @@
+# dbt-duckdb connection profile.
+#
+# DUCKDB_PATH is shared with the ingestion script and the dashboard so all three
+# point at the same database file. Run dbt from the repo root with:
+#
+#   dbt build --project-dir dbt_project --profiles-dir dbt_project
+#
+# so the default relative path resolves to <repo-root>/data/news.duckdb.
+
+news_sentiment:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('DUCKDB_PATH', 'data/news.duckdb') }}"
+      threads: 4

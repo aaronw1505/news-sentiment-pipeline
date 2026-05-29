@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: fct_sentiment_by_day
+    description: "Daily sentiment counts and average sentiment score."
+    columns:
+      - name: published_date
+        data_tests:
+          - unique
+          - not_null
+      - name: total_headlines
+        data_tests:
+          - not_null
+      - name: avg_sentiment_score
+        description: "Mean of Positive=+1 / Neutral=0 / Negative=-1, range [-1, +1]."
+
+  - name: dim_source_sentiment
+    description: "Per-source sentiment breakdown, ranked by headline volume."
+    columns:
+      - name: source_name
+        data_tests:
+          - unique
+          - not_null
+      - name: total_headlines
+        data_tests:
+          - not_null

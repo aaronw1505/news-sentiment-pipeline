@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: stg_headlines
+    description: "Cleaned, typed headlines — one row per article."
+    columns:
+      - name: headline_id
+        description: "Primary key (hash of the URL)."
+        data_tests:
+          - unique
+          - not_null
+      - name: sentiment
+        description: "Claude-assigned sentiment label."
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ["Positive", "Neutral", "Negative"]
+      - name: title
+        data_tests:
+          - not_null
